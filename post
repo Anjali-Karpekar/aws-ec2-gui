@@ -1,0 +1,38 @@
+How to launch Linux OS from EC2-instance as GUI
+Step 1: Launching an EC2 instance with Red Hat Linux First, you need to launch an EC2 instance with Red Hat Linux. You can do this by following these steps:
+1.	Log in to the AWS Management Console and navigate to the EC2 dashboard.
+2.	Click on the "Launch Instance" button.
+3.	Choose the "Red Hat Enterprise Linux" AMI from the list of available images.
+4.	Choose an instance type based on your needs and click "Next".
+5.	Configure your instance settings, such as network and security settings.
+6.	Review your instance details and click "Launch".
+Once your instance is launched, note down its Public IP address as we will need it later.
+Step 2: Connecting to the EC2 instance Next, you need to connect to the EC2 instance using an SSH client. You can use any SSH client of your choice, such as PuTTY or OpenSSH. Here's how to connect using the OpenSSH client:
+1.	Open a terminal or command prompt on your local machine.
+2.	Use the following command to connect to your instance: ssh -i path/to/your/private/key.pem username@public-ip-address Replace path/to/your/private/key.pem with the path to your private key file, username with your username, and public-ip-address with the Public IP address of your instance.
+3.	Enter "yes" if prompted to confirm the connection.
+Step 3: Installing and configuring the GUI Now that we're connected to the instance, we need to install and configure the GUI. Here are the steps to follow:
+1.	Update the package list: sudo yum update
+2.	Install the GNOME desktop environment and the TigerVNC server:
+    	sudo yum groupinstall "Server with GUI"
+      sudo yum install tigervnc-server
+3.Start the VNC server and set a password:
+     vncserver
+     vncpasswd
+The vncserver command will start the VNC server for the first time and generate a configuration file. The vncpasswd command will prompt you to set a password for VNC.
+4.	Stop the VNC server: vncserver -kill :1
+5.	Modify the VNC configuration file to use the GNOME desktop environment:
+      	cp ~/.vnc/xstartup ~/.vnc/xstartup.bak
+        vim ~/.vnc/xstartup
+   Remove the existing lines in the file and add the following:
+       #!/bin/sh
+       unset SESSION_MANAGER
+       exec /etc/X11/xinit/xinitrc
+Save and exit the file.
+6.	Restart the VNC server: vncserver
+Step 4: Connecting to the GUI Finally, you can connect to the GUI using a VNC client. You can use any VNC client of your choice, such as RealVNC or TigerVNC. Here's how to connect using the RealVNC client:
+1.	Open the RealVNC client and click "New Connection".
+2.	Enter the Public IP address of your instance and click "Continue".
+3.	Enter the username and password you set earlier for the VNC server and click "Continue".
+4.	You should now see the Red Hat Linux desktop in the VNC client window.
+That's it! You have successfully launched Red Hat Linux GUI on EC2. From here, you can install and run any GUI applications you need.
